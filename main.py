@@ -1,6 +1,6 @@
 import requests
 
-url = "https://restcountries.com/v3.1/all?fields=name"
+url = "https://restcountries.com/v3.1/all?fields=name,population,continents"
 odgovor = requests.get(url)
 drzave = odgovor.json()
 
@@ -51,7 +51,21 @@ def two():
 # 3: Izračunaj povprečno število prebivalcev (population) po celinah (continents)
 # Namig: Vedno preveri, če je population večji od 0
 def three():
-    pass
+    continents = {}
+    counts = {}
+    for drzava in drzave:
+        population = drzava.get("population", 0)
+        continent_list = drzava.get("continents", [])
+        if population > 0 and continent_list:
+            for continent in continent_list:
+                if continent not in continents:
+                    continents[continent] = 0
+                    counts[continent] = 0
+                continents[continent] += population
+                counts[continent] += 1
+    for continent in continents:
+        avg = continents[continent] / counts[continent]
+        print(f"Povprečno število prebivalcev v {continent}: {round(avg)}")
 
 # 4: Poišči državo z največ časovnimi pasovi (timezones)
 # Namig: Vsaka država ima vsaj en timezone
@@ -83,8 +97,10 @@ def nine():
 
 # 10: Izračunaj še eno statistiko po želji.
 def ten():
+
     pass
 
 
-
-two()
+#one()
+#two()
+three()
